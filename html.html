@@ -1,9 +1,48 @@
-<html>
-    <head>
-        <title>gopi</title>
-        <body>
-            <h1>gopi is handsome</h1>
-            <p >gopi in abt</p>
-        </body>
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Active Button with JavaScript</title>
+  <style>
+    /* Default button style */
+    #gopi {
+      color: black;
+      background-color: lightgray;
+      border: 1px solid black;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    /* Active button style */
+    .active {
+      color: white;
+      background-color: red;
+      border-color: darkred;
+    }
+  </style>
+</head>
+<body>
+  <button id="gopi">Click Me!</button>
+
+  <script>
+    const button = document.getElementById('gopi');
+
+    // Add the "active" class when the button is pressed
+    button.addEventListener('mousedown', () => {
+      button.classList.add('active');
+    });
+
+    // Remove the "active" class when the button is released
+    button.addEventListener('mouseup', () => {
+      button.classList.remove('active');
+    });
+
+    // Ensure the "active" class is removed if the mouse leaves the button
+    button.addEventListener('mouseleave', () => {
+      button.classList.remove('active');
+    });
+  </script>
+</body>
 </html>
