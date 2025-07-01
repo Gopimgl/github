@@ -4,3 +4,4 @@ let a=()=>{
 };
 let obj={name:"gopi",age:"12",b:a};
 obj.b();
+//js global object
