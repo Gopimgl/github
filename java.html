@@ -1,42 +1,74 @@
-<html>
-<head>
-<title>Page Title</title>
-</head>
-<script>
-    while(true){
-  console.log( Math.floor(1234 % 10));
-}
+const http = require('http');
 
-</script>
-<style>
-  #gopi{
-color:red;
-  }
-  title{
-    color : brown;
-  }
-  u{
-    color:green;
-  }
-  u{
-    color:blue;
-  }
-  </style>
-</style>
-<body>
+// Sample data for demonstration
+let data = [
+  { id: 1, name: 'Item 1' },
+  { id: 2, name: 'Item 2' }
+];
 
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
-<i>gopi is coder</i>
-<h1>This is a Heading</h1>
-<p class="gopi">This is a paragraph.</p>
-<i>gopi is coder</i>
-<u>gopi</u>
-<abbr>gopi</abbr>
-<<<<<<< HEAD
-<abbr title="gopi">gopi</abbr>
-<abbr>gopi</abbr>
-=======
->>>>>>> branch1
-</body>
-</html>
+// Create a server
+const server = http.createServer((req, res) => {
+  // Parse URL and method
+  const { url, method } = req;
+
+  // Route Handling
+  if (url === '/api/items' && method === 'GET') {
+    // GET: Retrieve items
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(data));
+  } else if (url === '/api/items' && method === 'POST') {
+    // POST: Add a new item
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+    req.on('end', () => {
+      const newItem = JSON.parse(body);
+      newItem.id = data.length + 1;
+      data.push(newItem);
+      res.writeHead(201, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(newItem));
+    });
+  } else if (url.startsWith('/api/items/') && method === 'PUT') {
+    // PUT: Update an item
+    const id = parseInt(url.split('/')[3]);
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+    req.on('end', () => {
+      const updatedItem = JSON.parse(body);
+      const index = data.findIndex(item => item.id === id);
+      if (index !== -1) {
+        data[index] = { ...data[index], ...updatedItem };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(data[index]));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Item not found' }));
+      }
+    });
+  } else if (url.startsWith('/api/items/') && method === 'DELETE') {
+    // DELETE: Remove an item
+    const id = parseInt(url.split('/')[3]);
+    const index = data.findIndex(item => item.id === id);
+    if (index !== -1) {
+      data.splice(index, 1);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'Item deleted' }));
+    } else {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'Item not found' }));
+    }
+  } else {
+    // Handle unknown routes
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Route not found');
+  }
+});
+
+// Start the server
+const PORT = 3000;
+server.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});

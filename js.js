@@ -1,28 +1,6 @@
-function g(n){
-    let p=false;
-    if(n<=1){
-        return "not prime";
-    }
-    else if(n===2){
-        return "prime";
-    }
-    else{
-       for(let i=2;i<Math.sqrt(n);i++){
-        if(n/i==0){
-            p=true;
-        }
-        else{
-            p=false;
-        }
-       }
-       
-    }
-    if(p){
-        console.log("it is not  prime");
-    }
-    else{
-        console.log("it is prime");
-    }
-
+ window.age=13;
+let a=()=>{
+  console.log(window.age)
 };
-g(17);
+let obj={name:"gopi",age:"12",b:a};
+obj.b();
